@@ -38,6 +38,20 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "django-unfold"
+version = "0.25.0"
+description = "Modern Django admin theme for seamless interface development"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "django_unfold-0.25.0-py3-none-any.whl", hash = "sha256:868010ec179bd9fc887112d4abcaf443cfc1e9240111746e2cb8b9aeb6cea7f4"},
+    {file = "django_unfold-0.25.0.tar.gz", hash = "sha256:2a2e2fe75fe19d97bcb55f6fa9aca4e75afd2afe9c616aba9f4a9cc06e6f0d5e"},
+]
+
+[package.dependencies]
+django = ">=3.2"
+
+[[package]]
 name = "sqlparse"
 version = "0.5.0"
 description = "A non-validating SQL parser."
@@ -77,4 +91,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "c77db7f996257f410026e0fa95046e3e76df1f9ed2641a9670c7a0f33ce3aa84"
+content-hash = "7078553f2a3b66ac6107f01599ca3b3863b9b705f39381b20adb6310645350ab"
