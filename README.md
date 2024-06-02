@@ -1,11 +1,15 @@
 # django-basic
 
+![](./docs/img/Screenshot.png)
+
         django-admin startproject project
 
         cd project
         python manage.py runserver
 
         python manage.py startapp polls
+
+        python manage.py runserver localhost:8000
 
 Visit [http://localhost:8000/polls/](http://localhost:8000/polls/)
 
@@ -17,7 +21,7 @@ Visit [http://localhost:8000/polls/](http://localhost:8000/polls/)
 
         python manage.py createsuperuser
 
-        python manage.py runserver
+        python manage.py runserver localhost:8000
 
 Visit [http://localhost:8000/admin/](http://localhost:8000/admin/)
 
