@@ -45,7 +45,23 @@ Changed view templates for the ones in [Voting System Project Using Django Frame
 
 ![](https://media.geeksforgeeks.org/wp-content/uploads/20200514105612/pollster-web-app.png)
 
+## reactpy-django
 
+Steps to add [reactpy-django]
+
+        python manage.py startapp stj
+
+Follow getting started in [reactpy-django]
+
+        python manage.py check
+
+        python manage.py runserver localhost:8000
+
+
+Visit [http://localhost:8000/stj/](http://localhost:8000/stj/)
+
+
+* [reactpy-django]: https://reactive-python.github.io/reactpy-django/latest/
 * [django-unfold], Modern Django admin theme for seamless interface development
 * [Writing your first Django app]
 * [django-polls]

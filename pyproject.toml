@@ -8,6 +8,8 @@ authors = ["Steve Jones <jonesst2608@gmail.com>"]
 python = "^3.10"
 django = "^5.0.6"
 django-unfold = "^0.25.0"
+reactpy-django = "^3.8.1"
+channels = {extras = ["daphne"], version = "^4.1.0"}
 
 [tool.poetry.dev-dependencies]
 pylint-django = "^2.5.5"
