@@ -58,7 +58,7 @@ Follow getting started in [reactpy-django]
         python manage.py runserver localhost:8000
 
 
-Visit [http://localhost:8000/stj/](http://localhost:8000/stj/)
+Visit [http://localhost:8000/stj](http://localhost:8000/stj)
 
 
 * [reactpy-django]: https://reactive-python.github.io/reactpy-django/latest/
