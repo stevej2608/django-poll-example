@@ -21,5 +21,5 @@ urlpatterns = [
     path("polls/", include("polls.urls")),
     path('admin/', admin.site.urls),
     path("reactpy/", include("reactpy_django.http.urls")),
-    path("", include("stj.urls")),
+    path("stj/", include("stj.urls")),
 ]

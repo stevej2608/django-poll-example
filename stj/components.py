@@ -1,3 +1,4 @@
+from django.urls import reverse
 from reactpy import component, html, use_location
 from reactpy_django.router import django_router
 from reactpy_router import route, use_params, use_query
@@ -24,42 +25,41 @@ def display_params(string: str):
 @component
 def main():
 
+    root = reverse(f'{__package__}:baseurl', args=[''])[:-1]
+
     # https://reactive-python.github.io/reactpy-django/latest/reference/router/
     # https://docs.djangoproject.com/en/5.0/topics/http/urls/#path-converters
 
     # Routes
-    # Example 1 : http://localhost:8000/router/
-    # Example 2 : http://localhost:8000/router/any/123/
-    # Example 3 : http://localhost:8000/router/integer/123/
-    # Example 4 : http://localhost:8000/router/path/123/
-    # Example 5 : http://localhost:8000/router/slug/xxx/
-    # Example 6 : http://localhost:8000/router/string/xxx/
-    # Example 7 : http://localhost:8000/router/uuid/075194d3-6885-417e-a8a8-6c931e272f00/
-    # Example 8 : http://localhost:8000/router/two_values/1/test/
-    # Example 9 : http://localhost:8000/router/abc/
-    # Example 10: http://localhost:8000/router/star/one/
-    # Example 11: http://localhost:8000/router/star/weapons?offset=0&limit=10
+    # Example 1 : http://localhost:8000/stj/
+    # Example 2 : http://localhost:8000/stj/any/123/
+    # Example 3 : http://localhost:8000/stj/integer/123/
+    # Example 4 : http://localhost:8000/stj/path/123/
+    # Example 5 : http://localhost:8000/stj/slug/xxx/
+    # Example 6 : http://localhost:8000/stj/string/xxx/
+    # Example 7 : http://localhost:8000/stj/uuid/075194d3-6885-417e-a8a8-6c931e272f00/
+    # Example 8 : http://localhost:8000/stj/two_values/1/test/
+    # Example 9 : http://localhost:8000/stj/abc/
+    # Example 10: http://localhost:8000/stj/star/one/
+    # Example 11: http://localhost:8000/stj/star/weapons?offset=0&limit=10
 
 
     return django_router(
-        route("/router/", display_params("Example 1")),
-        route("/router/any/<value>/", display_params("Example 2")),
-        route("/router/integer/<int:value>/", display_params("Example 3")),
-        route("/router/path/<path:value>/", display_params("Example 4")),
-        route("/router/slug/<slug:value>/", display_params("Example 5")),
-        route("/router/string/<str:value>/", display_params("Example 6")),
-        route("/router/uuid/<uuid:value>/", display_params("Example 7")),
-        route("/router/two_values/<int:value>/<str:value2>/", display_params("Example 8")),
+        route(f"{root}/", display_params("Example 1")),
+        route(f"{root}/any/<value>/", display_params("Example 2")),
+        route(f"{root}/integer/<int:value>/", display_params("Example 3")),
+        route(f"{root}/path/<path:value>/", display_params("Example 4")),
+        route(f"{root}/slug/<slug:value>/", display_params("Example 5")),
+        route(f"{root}/string/<str:value>/", display_params("Example 6")),
+        route(f"{root}/uuid/<uuid:value>/", display_params("Example 7")),
+        route(f"{root}/two_values/<int:value>/<str:value2>/", display_params("Example 8")),
 
-        route("/router/", None, route("abc/", display_params("Example 9"))),
+        route(f"{root}/", None, route("abc/", display_params("Example 9"))),
 
-        route("/router/star/", None,
+        route(f"{root}/star/", None,
             route("one/", display_params("Example 10")),
             route("*", display_params("Example 11")),
         ),
 
-
-
-        route("/router/*", display_params("Fallback")),
+        route(f"{root}/*", display_params("Fallback")),
     )
-
