@@ -1,9 +1,5 @@
-from django.urls import path
-
-from . import views
-
-
-app_name = 'stj'
+from django.urls import re_path
+from .views import router
 urlpatterns = [
-    path('', views.IndexView.as_view(), name='index'),
+    re_path(r"^router/(?P<path>.*)/?$", router),
 ]

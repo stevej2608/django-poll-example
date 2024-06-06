@@ -11,18 +11,19 @@
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "program": "manage.py",
-      "args": ["runserver"],
+      "args": ["runserver", "localhost:8000"],
       "console": "internalConsole",
       "internalConsoleOptions": "openOnSessionStart",
       "justMyCode": false,
       "serverReadyAction": {
-        "pattern": "Starting development server at\\s+(https?://\\S+)",
-        "uriFormat": "%s/app/book/1",
+        "pattern": "Starting ASGI/Daphne version 4.1.2 development server at\\s+(https?://\\S+)",
+        "uriFormat": "%spolls/",
         "action": "debugWithChrome",
         "killOnServerStop": true
       }
     },
 
+    
     {
       "name": "2a. Run Django.py (Test)",
       "type": "debugpy",

@@ -58,7 +58,14 @@ Follow getting started in [reactpy-django]
         python manage.py runserver localhost:8000
 
 
-Visit [http://localhost:8000/stj](http://localhost:8000/stj)
+Visit [Example 1](http://localhost:8000/router/)
+Visit [Example 2](http://localhost:8000/router/any/123/)
+Visit [Example 3](http://localhost:8000/router/integer/123/)
+Visit [Example 4](http://localhost:8000/router/path/123/)
+Visit [Example 5](http://localhost:8000/router/slug/xxx/)
+Visit [Example 6](http://localhost:8000/router/string/xxx/)
+Visit [Example 7](http://localhost:8000/router/uuid/075194d3-6885-417e-a8a8-6c931e272f00/)
+Visit [Example 8](http://localhost:8000/router/two_values/1/test/)
 
 
 * [reactpy-django]: https://reactive-python.github.io/reactpy-django/latest/
