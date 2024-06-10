@@ -1,22 +1,23 @@
+{% load reactpy %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
 		integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-	<title>Pollster {% block title %}{% endblock %}</title>
+	<title>Pollster</title>
 </head>
 
 <body>
-	<!--NavBar-->
-	{% include 'partials/_navbar.html'%}
+	{% component "polls.container.navbar" %}
 	<div class="container">
 		<div class="row">
 			<div class=".col-md-6 m-auto">
-				{% block content %}{% endblock%}
+				{% component "polls.container.router" %}
 			</div>
 		</div>
 	</div>
 </body>
 
 </html>
+
