@@ -1,14 +1,23 @@
+import logging
+from typing import Dict, Any
 from channels.db import database_sync_to_async
 from django.utils import timezone
-from reactpy import component, html
+from reactpy import component, event, html
+from reactpy.core.events import EventHandler
 from reactpy_django.hooks import use_query
 from reactpy_router import use_params, link
 
+from reactpy_forms import create_form, FormModel, use_form_state
+
 from ..models import Question
 
+EventArgs = Dict[str, Any]
 
-def url(path:str, args):
-    return ""
+log = logging.getLogger(__name__)
+
+class ChoiceData(FormModel):
+    choice: int = 0
+
 
 async def get_questions():
 
@@ -20,12 +29,8 @@ async def get_questions():
 @component
 def detail():
 
-    @component
-    def ChoiceElement(choice, counter):
-        return html.div({'class_name': 'form-check'},
-            html.input({'type': 'radio', 'name': 'choice', 'class_name': 'form-check-input', 'id': f'choice{counter}', 'value': f'{choice.id}'}),
-            html.label({'html_for': f'choice{counter }'}, f"{choice.choice_text}")
-        )
+    model, set_model = use_form_state(ChoiceData())
+    Form, Field = create_form(model, set_model)
 
     params = use_params()
     qs = use_query(get_questions)
@@ -34,6 +39,39 @@ def detail():
         return html.h2(f"Error when loading - {qs.error}")
     elif qs.data is None:
         return html.h2("Loading...")
+
+    @component
+    def SubmitButton(model: FormModel):
+
+        @event(prevent_default=True)
+        def onclick(event: EventArgs):
+            log.info(model)
+
+        return html.input({
+            'type': 'submit',
+            'value': 'Vote',
+            'class_name': 'btn btn-success btn-lg btn-block mt-4',
+            'on_click': onclick
+            })
+
+
+    def choice_field(choice, i):
+
+        @component
+        def ChoiceElement(props, counter):
+            return html.div({'class_name': 'form-check'},
+                html.input(props),
+                html.label({'html_for': f'choice{counter}'}, f"{choice.choice_text}")
+        )
+
+        return Field('choice', lambda props, field: ChoiceElement(
+                    props(
+                        {'type': 'radio',
+                        'class_name': 'form-check-input',
+                        'value': f'{choice.id}'
+                        }),
+                    i
+                    ))
 
     question = qs.data[int(params['pk']) - 1]
     error_message = None
@@ -45,10 +83,10 @@ def detail():
         #     html.strong(f"{error_message}")
         # ),
 
-        html.form({'action': "{% url 'polls:vote' question.id %}", 'method': 'post'},
+        Form(
+            [choice_field(choice, i+1) for i, choice in enumerate(question.choice_set.all())],
+            SubmitButton(model)
 
-            [ChoiceElement(choice, i+1) for i, choice in enumerate(question.choice_set.all())],
-
-            html.input({'type': 'submit', 'value': 'Vote', 'class_name': 'btn btn-success btn-lg btn-block mt-4'})
         )
+
     )
