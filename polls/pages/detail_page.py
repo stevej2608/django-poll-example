@@ -3,13 +3,15 @@ from typing import Dict, Any
 from channels.db import database_sync_to_async
 from django.utils import timezone
 from reactpy import component, event, html
-from reactpy.core.events import EventHandler
 from reactpy_django.hooks import use_query
 from reactpy_router import use_params, link
 
 from reactpy_forms import create_form, FormModel, use_form_state
 
 from ..models import Question
+
+from .page_404 import Page_404
+
 
 EventArgs = Dict[str, Any]
 
@@ -20,6 +22,8 @@ class ChoiceData(FormModel):
 
 
 async def get_questions():
+
+    # https://reactive-python.github.io/reactpy-django/latest/reference/hooks/#use-query
 
     def query():
         return Question.objects.filter(pub_date__lte=timezone.now())
@@ -73,20 +77,23 @@ def detail():
                     i
                     ))
 
-    question = qs.data[int(params['pk']) - 1]
-    error_message = None
+    try:
+        question = qs.data[int(params['pk']) - 1]
+        error_message = None
 
-    return html.div(
-        link("Back To Polls", to='/polls/', class_name='btn btn-secondary btn-sm mb-3'),
-        html.h1({'class_name': 'text-center mb-3'}, f"{question.question_text}"),
-        # html.p({'class_name': 'alert alert-danger'},
-        #     html.strong(f"{error_message}")
-        # ),
+        return html.div(
+            link("Back To Polls", to='/polls/', class_name='btn btn-secondary btn-sm mb-3'),
+            html.h1({'class_name': 'text-center mb-3'}, f"{question.question_text}"),
+            # html.p({'class_name': 'alert alert-danger'},
+            #     html.strong(f"{error_message}")
+            # ),
 
-        Form(
-            [choice_field(choice, i+1) for i, choice in enumerate(question.choice_set.all())],
-            SubmitButton(model)
+            Form(
+                [choice_field(choice, i+1) for i, choice in enumerate(question.choice_set.all())],
+                SubmitButton(model)
+
+            )
 
         )
-
-    )
+    except Exception as error:
+        return Page_404(str(error))

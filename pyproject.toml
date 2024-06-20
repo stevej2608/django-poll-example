@@ -11,6 +11,8 @@ django-unfold = "^0.25.0"
 reactpy-django = "^3.8.1"
 channels = {extras = ["daphne"], version = "^4.1.0"}
 convert2reactpy = {version = "^0.0.6", source = "pypicloud"}
+reactpy-forms = "0.0.6"
+pydantic = "^2.7.3"
 
 [tool.poetry.dev-dependencies]
 pylint-django = "^2.5.5"

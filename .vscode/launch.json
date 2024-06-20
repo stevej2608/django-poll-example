@@ -12,15 +12,15 @@
       "cwd": "${workspaceFolder}",
       "program": "manage.py",
       "args": ["runserver", "--noreload", "--nothreading", "localhost:8000"],
-      "console": "integratedTerminal",
+      "console": "internalConsole",
       "env": {"REACTPY_DEBUG_MODE": "1"},
       "subProcess": true,
-      // "internalConsoleOptions": "openOnSessionStart",
+      "internalConsoleOptions": "openOnSessionStart",
       "justMyCode": false,
       "django": true,
       "serverReadyAction": {
         "pattern": "Starting ASGI/Daphne version 4.1.2 development server at\\s+(https?://\\S+)",
-        "uriFormat": "%spolls/1/",
+        "uriFormat": "%spolls/11/",
         "action": "debugWithChrome",
         "killOnServerStop": true
       }

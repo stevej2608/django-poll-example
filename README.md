@@ -58,20 +58,9 @@ Follow getting started in [reactpy-django]
         python manage.py runserver localhost:8000
 
 
-Visit [Example 1](http://localhost:8000/stj/)
-Visit [Example 2](http://localhost:8000/stj/any/123/)
-Visit [Example 3](http://localhost:8000/stj/integer/123/)
-Visit [Example 4](http://localhost:8000/stj/path/123/)
-Visit [Example 5](http://localhost:8000/stj/slug/xxx/)
-Visit [Example 6](http://localhost:8000/stj/string/xxx/)
-Visit [Example 7](http://localhost:8000/stj/uuid/075194d3-6885-417e-a8a8-6c931e272f00/)
-Visit [Example 8](http://localhost:8000/stj/two_values/1/test/)
-Visit [Example 9](http://localhost:8000/stj/abc/)
-Visit [Example 10](http://localhost:8000/stj/star/one/)
-Visit [Example 11](http://localhost:8000/stj/star/weapons?offset=0&limit=10)
-
-Visit [http://localhost:8000/admin/](http://localhost:8000/admin/)
-Visit [http://localhost:8000/polls/](http://localhost:8000/polls/)
+* Visit [http://localhost:8000/polls/](http://localhost:8000/polls/)
+* Visit [http://localhost:8000/polls/1/](http://localhost:8000/polls/1/)
+* Visit [http://localhost:8000/admin/](http://localhost:8000/admin/)
 
 # Links
 
