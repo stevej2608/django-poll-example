@@ -48,8 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'reactpy_django',
-    'polls',
-    # 'stj'
+    'polls'
 ]
 
 MIDDLEWARE = [

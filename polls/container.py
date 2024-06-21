@@ -18,7 +18,15 @@ def _navbar():
     return html.nav({'class_name': 'navbar navbar-dark bg-primary mb-4'},
         html.div({'class_name': 'container'},
             link(html.div({'class_name': 'btn navbar-brand'}, "Pollster"), to="/polls/"),
+        ),
+
+        html.ul({'class_name': 'navbar-nav ml-auto'},
+            html.li({'class_name': 'nav-item'},
+                html.a({'class_name': 'btn navbar-brand', 'href': '/admin/'}, "Admin")
+            )
         )
+
+
     )
 
 @component

@@ -20,7 +20,7 @@
       "django": true,
       "serverReadyAction": {
         "pattern": "Starting ASGI/Daphne version 4.1.2 development server at\\s+(https?://\\S+)",
-        "uriFormat": "%spolls/1/",
+        "uriFormat": "%spolls/",
         "action": "debugWithChrome",
         "killOnServerStop": true
       }
