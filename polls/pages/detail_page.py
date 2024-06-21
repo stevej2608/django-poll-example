@@ -77,7 +77,7 @@ def detail():
         return html.input({
             'type': 'submit',
             'value': 'Vote',
-            'class_name': 'btn btn-success btn-lg btn-block mt-4',
+            'class_name': 'btn btn-primary btn-lg btn-block mt-4',
             'on_click': onclick
             })
 

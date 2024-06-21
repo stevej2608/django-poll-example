@@ -64,6 +64,7 @@ Follow getting started in [reactpy-django]
 
 # Links
 
+* [Bootstrap Pulse Theme]
 * [reactpy-django]: https://reactive-python.github.io/reactpy-django/latest/
         * [use-mutation](https://reactive-python.github.io/reactpy-django/latest/reference/hooks/#use-mutation)
 * [django-unfold], Modern Django admin theme for seamless interface development
@@ -71,6 +72,7 @@ Follow getting started in [reactpy-django]
 * [django-polls]
 
 
+[Bootstrap Pulse Theme]: https://bootswatch.com/4/pulse/
 [Voting System Project Using Django Framework]: https://www.geeksforgeeks.org/voting-system-project-using-django-framework/
 [django-unfold]: https://github.com/unfoldadmin/django-unfold
 [Writing your first Django app]: https://docs.djangoproject.com/en/5.0/intro/tutorial01/

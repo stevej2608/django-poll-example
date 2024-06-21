@@ -25,7 +25,7 @@ def results():
 
         return html.li({'class_name': 'list-group-item'},
             f"{choice.choice_text}",
-            html.span({'class_name': 'badge badge-success float-right'}, f"{choice.votes} vote{pluralize(choice.votes)}")
+            html.span({'class_name': 'badge badge-primary float-right'}, f"{choice.votes} vote{pluralize(choice.votes)}")
         )
 
     params = use_params()
@@ -51,7 +51,7 @@ def results():
 
         html.div({'class_name':'btn-group'},
             link("Back To Polls", to='/polls/', class_name='btn btn-secondary  mx-1'),
-            link("Vote again?", to=f'/polls/{pk}/', class_name='btn btn-dark'),
+            link("Vote again?", to=f'/polls/{pk}/', class_name='btn btn-primary'),
         ),
 
     )
