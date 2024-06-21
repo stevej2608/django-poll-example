@@ -65,6 +65,7 @@ Follow getting started in [reactpy-django]
 # Links
 
 * [reactpy-django]: https://reactive-python.github.io/reactpy-django/latest/
+        * [use-mutation](https://reactive-python.github.io/reactpy-django/latest/reference/hooks/#use-mutation)
 * [django-unfold], Modern Django admin theme for seamless interface development
 * [Writing your first Django app]
 * [django-polls]

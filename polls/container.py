@@ -3,13 +3,15 @@ from django.urls import reverse
 from reactpy import component, html
 from reactpy.core.types import VdomDictConstructor
 from reactpy_django.router import django_router
-from reactpy_router import Route, route
+from reactpy_router import Route, route, link
+
+from utils.types import Props
 
 from .pages.index_page import index
 from .pages.detail_page import detail
 from .pages.results_page import results
+from .pages.page_404 import Page_404
 
-from utils.types import Props
 
 
 @component
@@ -20,7 +22,7 @@ def vote():
 def navbar():
     return html.nav({'class_name': 'navbar navbar-dark bg-primary mb-4'},
         html.div({'class_name': 'container'},
-            html.a({'class_name': 'navbar-brand', 'href': '/'}, "Pollster")
+            link(html.div({'class_name': 'btn navbar-brand'}, "Pollster"), to="/polls/"),
         )
     )
 
@@ -62,4 +64,5 @@ def router():
         page_route(f"{root}/<int:pk>/", detail),
         page_route(f"{root}/<int:pk>/results/", results),
         page_route(f"{root}/<int:question_id>/vote/", vote),
+        page_route("*", Page_404)
     )

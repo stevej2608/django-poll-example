@@ -12,7 +12,7 @@ STYLE = """
 """
 
 @component
-def Page_404(msg: str):
+def Page_404(msg: str = ''):
     return html.div({'class_name': 'container error-page'},
         inline_style(STYLE),
         html.article(

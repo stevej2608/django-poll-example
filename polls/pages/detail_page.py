@@ -4,7 +4,7 @@ from channels.db import database_sync_to_async
 from django.utils import timezone
 from reactpy import component, event, html, use_state
 from reactpy_django.hooks import use_query, use_mutation
-from reactpy_router import use_params, link
+from reactpy_router import use_params, link, Navigate
 
 from reactpy_forms import create_form, FormModel, use_form_state
 
@@ -37,6 +37,7 @@ def detail():
     Form, Field = create_form(model, set_model)
 
     error, set_error = use_state('')
+    voted, set_voted = use_state(False)
 
     params = use_params()
     qs = use_query(get_questions)
@@ -46,6 +47,10 @@ def detail():
     elif qs.data is None:
         return html.h2("Loading...")
 
+    if voted:
+        return Navigate("/polls/")
+
+
     @component
     def SubmitButton(question: Question, choice:int):
 
@@ -53,6 +58,8 @@ def detail():
             selected_choice = await database_sync_to_async(question.choice_set.get)(pk=choice)
             selected_choice.votes += 1
             await database_sync_to_async(selected_choice.save)()
+
+        # https://reactive-python.github.io/reactpy-django/latest/reference/hooks/#use-mutation
 
         inc_vote = use_mutation(_inc_vote)
 
@@ -62,9 +69,9 @@ def detail():
             if choice == 0:
                 set_error("You didn't select a choice.")
             else:
-                set_error("")
                 inc_vote()
-
+                set_error("")
+                set_voted(True)
 
 
         return html.input({

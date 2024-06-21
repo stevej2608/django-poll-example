@@ -36,9 +36,9 @@ def results():
     elif qs.data is None:
         return html.h2("Loading...")
 
-    pk = int(params['pk']) - 1
+    pk = int(params['pk'])
 
-    question = qs.data[pk]
+    question = qs.data[pk - 1]
 
 
     return html.div(
@@ -51,7 +51,7 @@ def results():
 
         html.div({'class_name':'btn-group'},
             link("Back To Polls", to='/polls/', class_name='btn btn-secondary  mx-1'),
-            link("Vote again?", to=f'/polls/detail/{pk}/', class_name='btn btn-dark'),
+            link("Vote again?", to=f'/polls/{pk}/', class_name='btn btn-dark'),
         ),
 
     )
