@@ -13,13 +13,8 @@ from .pages.results_page import results
 from .pages.page_404 import Page_404
 
 
-
 @component
-def vote():
-    return html.div("vote")
-
-@component
-def navbar():
+def _navbar():
     return html.nav({'class_name': 'navbar navbar-dark bg-primary mb-4'},
         html.div({'class_name': 'container'},
             link(html.div({'class_name': 'btn navbar-brand'}, "Pollster"), to="/polls/"),
@@ -27,7 +22,7 @@ def navbar():
     )
 
 @component
-def PageNotFound(msg: str):
+def _page_not_found(msg: str):
     return html.article(
         html.header(
             html.h1("404 Not Found")
@@ -37,9 +32,9 @@ def PageNotFound(msg: str):
     )
 
 @component
-def PageContainer(page: VdomDictConstructor, **props: Props):
+def _page_container(page: VdomDictConstructor, **props: Props):
     return html._(
-        navbar(),
+        _navbar(),
         html.div({'class_name': 'container'},
             html.div({'class_name': 'row'},
                 html.div({'class_name': '.col-md-6 m-auto'},
@@ -50,9 +45,10 @@ def PageContainer(page: VdomDictConstructor, **props: Props):
     )
 
 
-def page_route(path: str, page: Any) -> Route:
-    element = PageContainer(page)
+def _page_route(path: str, page: Any) -> Route:
+    element = _page_container(page)
     return route(path, element)
+
 
 @component
 def router():
@@ -60,9 +56,8 @@ def router():
     root = reverse(f'{__package__}:baseurl', args=[''])[:-1]
 
     return django_router(
-        page_route(f"{root}/", index),
-        page_route(f"{root}/<int:pk>/", detail),
-        page_route(f"{root}/<int:pk>/results/", results),
-        page_route(f"{root}/<int:question_id>/vote/", vote),
-        page_route("*", Page_404)
+        _page_route(f"{root}/", index),
+        _page_route(f"{root}/<int:pk>/", detail),
+        _page_route(f"{root}/<int:pk>/results/", results),
+        _page_route("*", Page_404)
     )
