@@ -53,6 +53,8 @@ Steps to add [reactpy-django]
 
 Follow getting started in [reactpy-django]
 
+        python3 manage.py changepassword admin
+
         python manage.py check
 
         python manage.py runserver localhost:8000
