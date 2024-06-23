@@ -43,7 +43,7 @@ def results():
 
     return html.div(
         html.h1({'class_name': 'mb-5 text-center'}, f"{question.question_text}"),
-        html.ul({'class_name': 'list-group mb-5'},
+        html.ul({'class_name': 'results list-group mb-5'},
 
             [ChoiceVote(choice) for choice in question.choice_set.all()],
 

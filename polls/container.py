@@ -65,7 +65,9 @@ def router():
 
     return django_router(
         _page_route(f"{root}/", index),
+        _page_route(f"{root}/", index),
         _page_route(f"{root}/<int:pk>/", detail),
         _page_route(f"{root}/<int:pk>/results/", results),
+        _page_route("/", index),
         _page_route("*", Page_404)
     )

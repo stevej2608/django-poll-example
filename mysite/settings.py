@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import os
+import sys
 import logging
 from pathlib import Path
 
@@ -84,13 +85,24 @@ ASGI_APPLICATION = "mysite.asgi.application"
 
 
 # Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
+# WARNING: There are overrides in `test_components.py` that require no in-memory
+# databases are used for testing. Make sure all SQLite databases are on disk.
+DB_NAME = "db"
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        # Changing NAME is needed due to a bug related to `manage.py test`
+        "NAME": os.path.join(
+            BASE_DIR,
+            f"test_{DB_NAME}.sqlite3" if "test" in sys.argv else f"{DB_NAME}.sqlite3",
+        ),
+        "TEST": {
+            "NAME": os.path.join(BASE_DIR, f"test_{DB_NAME}.sqlite3"),
+            "OPTIONS": {"timeout": 20},
+            "DEPENDENCIES": [],
+        },
+        "OPTIONS": {"timeout": 20},
+    },
 }
 
 

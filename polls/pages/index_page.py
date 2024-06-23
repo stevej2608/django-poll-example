@@ -40,10 +40,10 @@ def index():
     elif qs.data is None:
         return html.h2("Loading...")
 
-    if qs.data is not None:
+    if qs.data:
         return html.div(
             html.h1({'class_name':"text-center mb-3"},"Poll Questions"),
             *[QuestionCard(question, i+1) for i, question in enumerate(qs.data)]
             )
     else:
-        return html.p("No polls available.")
+        return html.h2("No polls available.")

@@ -24,7 +24,7 @@ urlpatterns = [
     path("polls/", include("polls.urls")),
     path('admin/', admin.site.urls),
     path("reactpy/", include("reactpy_django.http.urls")),
-    path('', router, {'path': ''}),
+    path('', router, {'path': ''}, name='index'),
     path('<path:path>', router)
 
 ]
