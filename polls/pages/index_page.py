@@ -22,13 +22,13 @@ async def get_questions():
 def index():
 
     @component
-    def QuestionCard(question, pk):
+    def QuestionCard(question):
         return html.div({'class_name': 'card-mb-3'},
             html.div({'class_name': 'card-body'},
                 html.p({'class_name': 'lead'}, question.question_text),
                 html.div({'class_name':'btn-group'},
-                    link("Vote Now", to=f'/polls/{pk}/', class_name='btn btn-primary btn-sm  mx-1'),
-                    link("Results", to=f'/polls/{pk}/results/', class_name='btn btn-secondary btn-sm'),
+                    link("Vote Now", to=f'/polls/{question.pk}/', class_name='btn btn-primary btn-sm  mx-1'),
+                    link("Results", to=f'/polls/{question.pk}/results/', class_name='btn btn-secondary btn-sm'),
                 )
             )
         )
@@ -43,7 +43,7 @@ def index():
     if qs.data:
         return html.div(
             html.h1({'class_name':"text-center mb-3"},"Poll Questions"),
-            *[QuestionCard(question, i+1) for i, question in enumerate(qs.data)]
+            *[QuestionCard(question) for question in qs.data]
             )
     else:
         return html.h2("No polls available.")
