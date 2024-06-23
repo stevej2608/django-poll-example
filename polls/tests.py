@@ -13,6 +13,7 @@ from django.core.management import call_command
 from django.db import connections
 from django.utils import timezone
 from django.test.utils import modify_settings
+from django.urls import reverse
 
 from playwright.sync_api import sync_playwright
 
@@ -22,7 +23,7 @@ from reactpy_django.utils import strtobool
 from .models import Question, Choice
 
 
-GITHUB_ACTIONS = os.getenv("GITHUB_ACTIONS", "False")
+GITHUB_ACTIONS = os.getenv("GITHUB_ACTIONS", "True")
 CLICK_DELAY = 250 if strtobool(GITHUB_ACTIONS) else 25  # Delay in miliseconds.
 
 
@@ -160,7 +161,7 @@ class ComponentTests(ChannelsLiveServerTestCase):
         asyncio.run(create_question("What is the capital of France?", ['London', 'Paris', 'New York']))
         asyncio.run(create_question("What is the capital of Germany?", ['London', 'Berlin', 'New York']))
 
-        with self.new_page('/polls/') as page:
+        with self.new_page(reverse("polls:index")) as page:
 
             # Confirm test the question is listed and select it for voting
 
@@ -196,4 +197,4 @@ class ComponentTests(ChannelsLiveServerTestCase):
 
             results = page.query_selector("ul.results")
             assert results
-            assert results.text_content() == 'London0 voteParis1 votesNew York0 votes'
+            assert results.text_content() == 'London0 votesParis1 voteNew York0 votes'

@@ -21,7 +21,7 @@ from polls.views import router
 
 
 urlpatterns = [
-    path("polls/", include("polls.urls")),
+    path("polls/", include("polls.urls"), name="polls"),
     path('admin/', admin.site.urls),
     path("reactpy/", include("reactpy_django.http.urls")),
     path('', router, {'path': ''}, name='index'),

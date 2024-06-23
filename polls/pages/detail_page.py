@@ -2,13 +2,14 @@ import logging
 from typing import Dict, Any
 from channels.db import database_sync_to_async
 from django.utils import timezone
+from django.urls import reverse
 from reactpy import component, event, html, use_state
 from reactpy_django.hooks import use_query, use_mutation
 from reactpy_router import use_params, link, Navigate
 
 from reactpy_forms import create_form, FormModel, use_form_state
 
-from ..models import Question, Choice
+from ..models import Question
 
 from .page_404 import Page_404
 
@@ -48,7 +49,7 @@ def detail():
         return html.h2("Loading...")
 
     if voted:
-        return Navigate("/polls/")
+        return Navigate(reverse("polls:index"))
 
 
     @component
@@ -114,7 +115,7 @@ def detail():
 
 
         return html.div(
-            link("Back To Polls", to='/polls/', class_name='btn btn-secondary btn-sm mb-3'),
+            link("Back To Polls", to=reverse('polls:index'), class_name='btn btn-secondary btn-sm mb-3'),
             html.h1({'class_name': 'text-center mb-3'}, f"{question.question_text}"),
             error_message(error),
 

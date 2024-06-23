@@ -35,6 +35,7 @@
       "program": "manage.py",
       "args": ["test", "polls"],
       "console": "internalConsole",
+      "env": {"PLAYWRIGHT_HEADLESS": "false"},
       "internalConsoleOptions": "openOnSessionStart",
       "justMyCode": false,
     },

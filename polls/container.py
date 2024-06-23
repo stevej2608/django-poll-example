@@ -61,7 +61,7 @@ def _page_route(path: str, page: Any) -> Route:
 @component
 def router():
 
-    root = reverse(f'{__package__}:baseurl', args=[''])[:-1]
+    root = reverse('polls:index')[:-1]
 
     return django_router(
         _page_route(f"{root}/", index),

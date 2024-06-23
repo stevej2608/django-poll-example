@@ -1,5 +1,6 @@
 from channels.db import database_sync_to_async
 from django.utils import timezone
+from django.urls import reverse
 from reactpy import component, html
 from reactpy_django.hooks import use_query
 from reactpy_router import use_params, link
@@ -50,8 +51,8 @@ def results():
         ),
 
         html.div({'class_name':'btn-group'},
-            link("Back To Polls", to='/polls/', class_name='btn btn-secondary  mx-1'),
-            link("Vote again?", to=f'/polls/{pk}/', class_name='btn btn-primary'),
+            link("Back To Polls", to=reverse('polls:index'), class_name='btn btn-secondary  mx-1'),
+            link("Vote again?", to=reverse("polls:detail", kwargs={'pk': pk}), class_name='btn btn-primary'),
         ),
 
     )
