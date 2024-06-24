@@ -4,7 +4,7 @@ from reactpy_router import link
 
 from ..models import Question, Choice
 
-from .common import use_params, use_query, LoadingException
+from .common import Params, use_query, LoadingException
 from .page_404 import Page_404
 
 
@@ -24,7 +24,7 @@ def results():
 
     try:
 
-        params = use_params()
+        params = Params.from_slug()
         question = use_query(Question.get_question, pk=params.pk)
 
         return html.div(

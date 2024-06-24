@@ -1,19 +1,13 @@
 from __future__ import annotations
-
-from typing import  Awaitable, Callable,overload
+from typing import Awaitable, Callable,overload
 from reactpy_django.types import FuncParams, Inferred, QueryOptions
-from pydantic import BaseModel
-import reactpy_router
 import reactpy_django
 
+from utils.params import ParamsBase
 
-class Params(BaseModel):
+
+class Params(ParamsBase):
     pk: int
-
-
-def use_params():
-    params = reactpy_router.use_params()
-    return Params(**params)
 
 
 class LoadingException(Exception):

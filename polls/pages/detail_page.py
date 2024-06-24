@@ -1,6 +1,5 @@
 import logging
 from typing import Dict, Any
-from channels.db import database_sync_to_async
 from django.urls import reverse
 from reactpy import component, event, html, use_state
 from reactpy_django.hooks import use_mutation
@@ -9,7 +8,7 @@ from reactpy_router import use_params, link, Navigate
 from reactpy_forms import create_form, FormModel, use_form_state
 
 from ..models import Question, Choice
-from .common import use_params, use_query, LoadingException
+from .common import Params, use_query, LoadingException
 
 from .page_404 import Page_404
 
@@ -88,7 +87,7 @@ def detail():
 
     try:
 
-        params = use_params()
+        params = Params.from_slug()
         question: Question = use_query(Question.get_question, pk=params.pk )
 
         return html.div(
