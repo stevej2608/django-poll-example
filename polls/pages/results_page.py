@@ -1,10 +1,10 @@
 from django.urls import reverse
 from reactpy import component, html
-from reactpy_router import use_params, link
+from reactpy_router import link
 
 from ..models import Question, Choice
 
-from .common import use_query, LoadingException
+from .common import use_params, use_query, LoadingException
 from .page_404 import Page_404
 
 
@@ -25,10 +25,7 @@ def results():
     try:
 
         params = use_params()
-        pk = int(params['pk'])
-        qs = use_query(Question.get_question, pk=pk)
-        question: Question = qs.data
-
+        question = use_query(Question.get_question, pk=params.pk)
 
         return html.div(
             html.h1({'class_name': 'mb-5 text-center'}, f"{question.question_text}"),
@@ -40,7 +37,7 @@ def results():
 
             html.div({'class_name':'btn-group'},
                 link("Back To Polls", to=reverse('polls:index'), class_name='btn btn-secondary  mx-1'),
-                link("Vote again?", to=reverse("polls:detail", kwargs={'pk': pk}), class_name='btn btn-primary'),
+                link("Vote again?", to=reverse("polls:detail", kwargs={'pk': params.pk}), class_name='btn btn-primary'),
             ),
 
         )

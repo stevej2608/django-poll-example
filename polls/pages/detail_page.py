@@ -9,7 +9,7 @@ from reactpy_router import use_params, link, Navigate
 from reactpy_forms import create_form, FormModel, use_form_state
 
 from ..models import Question, Choice
-from .common import use_query, LoadingException
+from .common import use_params, use_query, LoadingException
 
 from .page_404 import Page_404
 
@@ -89,10 +89,7 @@ def detail():
     try:
 
         params = use_params()
-        pk = int(params['pk'])
-        qs = use_query(Question.get_question, pk=pk )
-        question: Question = qs.data
-
+        question: Question = use_query(Question.get_question, pk=params.pk )
 
         return html.div(
             link("Back To Polls", to=reverse('polls:index'), class_name='btn btn-secondary btn-sm mb-3'),

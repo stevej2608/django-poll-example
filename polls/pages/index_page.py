@@ -1,3 +1,4 @@
+from typing import List
 from django.urls import reverse
 from reactpy import component, html
 from reactpy_router import link
@@ -22,11 +23,11 @@ def index():
         )
 
     try:
-        qs = use_query(Question.get_ordered_questions)
-        if qs.data:
+        questions: List[Question] = use_query(Question.get_ordered_questions)
+        if questions:
             return html.div(
                 html.h1({'class_name':"text-center mb-3"},"Poll Questions"),
-                *[QuestionCard(question) for question in qs.data]
+                *[QuestionCard(question) for question in questions]
                 )
         else:
             return html.h2("No polls available.")
