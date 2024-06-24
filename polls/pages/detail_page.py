@@ -1,15 +1,15 @@
 import logging
 from typing import Dict, Any
 from channels.db import database_sync_to_async
-from django.utils import timezone
 from django.urls import reverse
 from reactpy import component, event, html, use_state
-from reactpy_django.hooks import use_query, use_mutation
+from reactpy_django.hooks import use_mutation
 from reactpy_router import use_params, link, Navigate
 
 from reactpy_forms import create_form, FormModel, use_form_state
 
-from ..models import Question
+from ..models import Question, Choice
+from .common import use_query, LoadingException
 
 from .page_404 import Page_404
 
@@ -22,15 +22,6 @@ class ChoiceData(FormModel):
     choice: int = 0
 
 
-async def get_questions():
-
-    # https://reactive-python.github.io/reactpy-django/latest/reference/hooks/#use-query
-
-    def query():
-        return Question.objects.filter(pub_date__lte=timezone.now())
-
-    return await database_sync_to_async(query)()
-
 @component
 def detail():
 
@@ -40,14 +31,6 @@ def detail():
     error, set_error = use_state('')
     voted, set_voted = use_state(False)
 
-    params = use_params()
-    qs = use_query(get_questions)
-
-    if qs.error:
-        return html.h2(f"Error when loading - {qs.error}")
-    elif qs.data is None:
-        return html.h2("Loading...")
-
     if voted:
         return Navigate(reverse("polls:index"))
 
@@ -55,14 +38,7 @@ def detail():
     @component
     def SubmitButton(question: Question, choice:int):
 
-        async def _inc_vote():
-            selected_choice = await database_sync_to_async(question.choice_set.get)(pk=choice)
-            selected_choice.votes += 1
-            await database_sync_to_async(selected_choice.save)()
-
-        # https://reactive-python.github.io/reactpy-django/latest/reference/hooks/#use-mutation
-
-        inc_vote = use_mutation(_inc_vote)
+        inc_vote = use_mutation(question.inc_vote)
 
         @event(prevent_default=True)
         def onclick(event: EventArgs):
@@ -70,7 +46,7 @@ def detail():
             if choice == 0:
                 set_error("You didn't select a choice.")
             else:
-                inc_vote()
+                inc_vote(choice=choice)
                 set_error("")
                 set_voted(True)
 
@@ -92,7 +68,7 @@ def detail():
         return ""
 
 
-    def choice_field(choice, i):
+    def choice_field(choice: Choice):
 
         @component
         def ChoiceElement(props, counter):
@@ -105,12 +81,15 @@ def detail():
                     props(
                         {'type': 'radio',
                         'class_name': 'form-check-input',
-                        'value': f'{choice.id}'
+                        'value': f'{choice.pk}'
                         }),
-                    i
+                    choice.pk
                     ))
 
     try:
+
+        params = use_params()
+        qs = use_query(Question.get_questions)
         question: Question = qs.data[int(params['pk']) - 1]
 
 
@@ -120,11 +99,13 @@ def detail():
             error_message(error),
 
             Form(
-                [choice_field(choice, i+1) for i, choice in enumerate(question.choice_set.all())],
+                [choice_field(choice) for choice in question.choice_set.all()],
                 SubmitButton(question, model.choice)
 
             )
 
         )
+    except LoadingException as ex:
+        return html.h2(str(ex))
     except Exception as error:
         return Page_404(str(error))

@@ -1,25 +1,18 @@
-from channels.db import database_sync_to_async
-from django.utils import timezone
 from django.urls import reverse
 from reactpy import component, html
-from reactpy_django.hooks import use_query
 from reactpy_router import use_params, link
 
-from ..models import Question
+from ..models import Question, Choice
 
-async def get_questions():
-
-    def query():
-        return Question.objects.filter(pub_date__lte=timezone.now())
-
-    return await database_sync_to_async(query)()
+from .common import use_query, LoadingException
+from .page_404 import Page_404
 
 
 @component
 def results():
 
     @component
-    def ChoiceVote(choice):
+    def ChoiceVote(choice: Choice):
 
         def pluralize(count):
             return "s" if count != 1 else ""
@@ -29,30 +22,29 @@ def results():
             html.span({'class_name': 'badge badge-primary float-right'}, f"{choice.votes} vote{pluralize(choice.votes)}")
         )
 
-    params = use_params()
-    qs = use_query(get_questions)
+    try:
 
-    if qs.error:
-        return html.h2(f"Error when loading - {qs.error}")
-    elif qs.data is None:
-        return html.h2("Loading...")
-
-    pk = int(params['pk'])
-
-    question = qs.data[pk - 1]
+        params = use_params()
+        qs = use_query(Question.get_questions)
+        pk = int(params['pk'])
+        question = qs.data[pk - 1]
 
 
-    return html.div(
-        html.h1({'class_name': 'mb-5 text-center'}, f"{question.question_text}"),
-        html.ul({'class_name': 'results list-group mb-5'},
+        return html.div(
+            html.h1({'class_name': 'mb-5 text-center'}, f"{question.question_text}"),
+            html.ul({'class_name': 'results list-group mb-5'},
 
-            [ChoiceVote(choice) for choice in question.choice_set.all()],
+                [ChoiceVote(choice) for choice in question.choice_set.all()],
 
-        ),
+            ),
 
-        html.div({'class_name':'btn-group'},
-            link("Back To Polls", to=reverse('polls:index'), class_name='btn btn-secondary  mx-1'),
-            link("Vote again?", to=reverse("polls:detail", kwargs={'pk': pk}), class_name='btn btn-primary'),
-        ),
+            html.div({'class_name':'btn-group'},
+                link("Back To Polls", to=reverse('polls:index'), class_name='btn btn-secondary  mx-1'),
+                link("Vote again?", to=reverse("polls:detail", kwargs={'pk': pk}), class_name='btn btn-primary'),
+            ),
 
-    )
+        )
+    except LoadingException as ex:
+        return html.h2(str(ex))
+    except Exception as error:
+        return Page_404(str(error))
