@@ -22,7 +22,7 @@ class Question(models.Model):
 
 
     @staticmethod
-    async def get_questions(ordered: int = 0):
+    async def get_questions():
 
         def query():
             return Question.objects.filter(pub_date__lte=timezone.now())
@@ -34,6 +34,15 @@ class Question(models.Model):
 
         def query():
             return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
+
+        return await database_sync_to_async(query)()
+
+
+    @staticmethod
+    async def get_question(pk:int):
+
+        def query():
+            return Question.objects.get(pk=pk)
 
         return await database_sync_to_async(query)()
 

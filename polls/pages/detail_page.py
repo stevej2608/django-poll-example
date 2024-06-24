@@ -89,8 +89,9 @@ def detail():
     try:
 
         params = use_params()
-        qs = use_query(Question.get_questions)
-        question: Question = qs.data[int(params['pk']) - 1]
+        pk = int(params['pk'])
+        qs = use_query(Question.get_question, pk=pk )
+        question: Question = qs.data
 
 
         return html.div(

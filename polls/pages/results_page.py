@@ -25,9 +25,9 @@ def results():
     try:
 
         params = use_params()
-        qs = use_query(Question.get_questions)
         pk = int(params['pk'])
-        question = qs.data[pk - 1]
+        qs = use_query(Question.get_question, pk=pk)
+        question: Question = qs.data
 
 
         return html.div(
