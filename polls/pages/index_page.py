@@ -4,8 +4,8 @@ from reactpy import component, html
 from reactpy_router import link
 
 from ..models import Question
-from .common import use_query, LoadingException
-
+from .common import use_query, LoadingException, RecordNotFound
+from .page_404 import Page_404
 
 @component
 def index():
@@ -24,12 +24,13 @@ def index():
 
     try:
         questions: List[Question] = use_query(Question.get_ordered_questions)
-        if questions:
-            return html.div(
-                html.h1({'class_name':"text-center mb-3"},"Poll Questions"),
-                *[QuestionCard(question) for question in questions]
-                )
-        else:
-            return html.h2("No polls available.")
+        return html.div(
+            html.h1({'class_name':"text-center mb-3"},"Poll Questions"),
+            *[QuestionCard(question) for question in questions]
+            )
     except LoadingException as ex:
         return html.h2(str(ex))
+    except RecordNotFound:
+        return html.h2("No polls available.")
+    except Exception:
+        return Page_404()

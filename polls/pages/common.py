@@ -13,6 +13,9 @@ class Params(ParamsBase):
 class LoadingException(Exception):
     pass
 
+class RecordNotFound(Exception):
+    pass
+
 @overload
 def use_query(
     options: QueryOptions,
@@ -35,9 +38,17 @@ def use_query(*args, **kwargs) -> Inferred:
     qs = reactpy_django.hooks.use_query(*args, **kwargs)
 
     if qs.error:
-        raise LoadingException(f"Error when loading - {qs.error}")
+        raise Exception(qs.error)
     elif qs.data is None:
         raise LoadingException("Loading...")
+
+    records = [rec for rec in qs.data]
+
+    if not records:
+        raise RecordNotFound("Record Not Found")
+
+    if len(records) == 1:
+        qs.data = qs.data[0]
 
     return qs.data
  

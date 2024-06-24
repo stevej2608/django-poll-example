@@ -147,6 +147,13 @@ class ComponentTests(ChannelsLiveServerTestCase):
         return MessageWriter(slug)
 
 
+    def test_404(self):
+        with self.new_page('/polls/99/') as page:
+            elem = page.locator("h1")
+            elem.wait_for()
+            self.assertEqual("404 Not Found", elem.text_content())
+
+
     def test_no_questions(self):
         with self.new_page('/polls/') as page:
             elem = page.locator("h2")

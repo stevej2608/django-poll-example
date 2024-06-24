@@ -43,5 +43,5 @@ def results():
         )
     except LoadingException as ex:
         return html.h2(str(ex))
-    except Exception as error:
-        return Page_404(str(error))
+    except Exception:
+        return Page_404()

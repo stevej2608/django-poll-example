@@ -42,7 +42,8 @@ class Question(models.Model):
     async def get_question(pk:int):
 
         def query():
-            return Question.objects.get(pk=pk)
+            return Question.objects.filter(pk=pk)
+
 
         return await database_sync_to_async(query)()
 
