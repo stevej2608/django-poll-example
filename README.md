@@ -24,7 +24,7 @@ simply click the **Admin** link, top-right in every page.
 
  Credentials:
  
-        user:admin, password:admin
+        user:admin, password:superadmin
 
 To change the admin password:
 
