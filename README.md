@@ -1,4 +1,4 @@
-# reactpy-django-polls
+# reactpy-django-example
 
 ![](./docs/img/screenshot.jpg)
 
