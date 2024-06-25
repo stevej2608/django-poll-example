@@ -1,79 +1,71 @@
-# django-basic
+# reactpy-django-polls
 
-![](./docs/img/Screenshot.png)
+![](./docs/img/screenshot.jpg)
 
-Steps used in the tutorial [Writing your first Django app]
+An example of using [reactpy-django] to create a simple, Django based, single 
+page application (SPA). The project is a reworking of the introductory 
+Django project: [Writing your first Django app]. If you are unfamiliar 
+with Django get up to speed by working through this first.
 
-        django-admin startproject project
+## Usage
 
-        cd project
-        python manage.py runserver
+        git clone https://github.com/stevej2608/reactpy-django-polls
 
-        python manage.py startapp polls
-
-        python manage.py runserver localhost:8000
-
-Visit [http://localhost:8000/polls/](http://localhost:8000/polls/)
-
-        python manage.py migrate
-
-        python manage.py makemigrations polls
-        python manage.py sqlmigrate polls 0001
-        python manage.py migrate
-
-        python manage.py createsuperuser
-
-Code up the project [django-polls], and then run the finished project:
+        cd reactpy-django-polls
+        poetry install --no-root
 
         python manage.py runserver localhost:8000
 
-Visit [http://localhost:8000/admin/](http://localhost:8000/admin/)
-
-## Testing 
-
-        python manage.py test polls
-
-## Improvements
-
-### Admin dashboard
-
-Added [django-unfold]
-
-### Added bootstrap based templates
-
-Changed view templates for the ones in [Voting System Project Using Django Framework]
-
-![](https://media.geeksforgeeks.org/wp-content/uploads/20200514105612/pollster-web-app.png)
-
-## reactpy-django
-
-Steps to add [reactpy-django]
-
-        python manage.py startapp stj
-
-Follow getting started in [reactpy-django]
-
-        python3 manage.py changepassword admin
-
-        python manage.py check
-
-        python manage.py runserver localhost:8000
+Visit [http://localhost:8000](http://localhost:8000)
 
 
-* Visit [http://localhost:8000/polls/](http://localhost:8000/polls/)
-* Visit [http://localhost:8000/polls/1/](http://localhost:8000/polls/1/)
-* Visit [http://localhost:8000/admin/](http://localhost:8000/admin/)
+Use Django admin to add/remove questions. Visit [Admin](http://localhost:8000/admin/) or
+simply click the **Admin** link, top-right in every page, (credentials user:admin, password:admin). 
 
-# Links
+## Features
 
-* [Bootstrap Pulse Theme]
+- [X] No templates, all pages are coded in python alone.
+- [X] Uses 
+- [X] Integrates with Django ORM using *use_query* and *use_mutation* hooks.
+- [X] Can be used along side other Django apps
+
+## Code Overview
+
+ [reactpy-django] makes no changes to the Django ecosystem. The package provides
+ a bridge that maps standard Django routes, as defined by urls, views 
+ and templates, onto [reactpy] components. One or many such mapping can be 
+ defined. 
+ 
+ As with any Django app [urls.py](./polls/urls.py) defines a URL
+ pattern that maps onto a [view](/workspaces/django/basic/polls/views.py). The
+ view, in turn, loads a [template](polls/templates/index.html), 
+ 
+ The bridge between Django and [reactpy-django] is defined in the template:
+
+*[index.html](polls/templates/index.html)*
+ ```
+ {% load reactpy %}
+
+<body>
+	{% component "polls.spa_router.spa_router" %}
+</body>
+ ``` 
+
+
+
+
+## Links
+
+* [reactpy]
 * [reactpy-django]: https://reactive-python.github.io/reactpy-django/latest/
         * [use-mutation](https://reactive-python.github.io/reactpy-django/latest/reference/hooks/#use-mutation)
 * [django-unfold], Modern Django admin theme for seamless interface development
 * [Writing your first Django app]
 * [django-polls]
+* [Bootstrap Pulse Theme]
 
 
+[reactpy]: https://reactpy.dev/docs/index.html
 [Bootstrap Pulse Theme]: https://bootswatch.com/4/pulse/
 [Voting System Project Using Django Framework]: https://www.geeksforgeeks.org/voting-system-project-using-django-framework/
 [django-unfold]: https://github.com/unfoldadmin/django-unfold
