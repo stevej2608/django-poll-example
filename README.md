@@ -81,6 +81,23 @@ defined in [common.py](./polls/pages/common.py). This converts loading and error
 notifications into exceptions allowing the caller to be wrapped in 
 a try/catch block.
 
+[index_page.py](polls/pages/index_page.py)
+```
+    ...
+    try:
+        questions: List[Question] = use_query(Question.get_ordered_questions)
+        return html.div(
+            html.h1({'class_name':"text-center mb-3"},"Poll Questions"),
+            *[QuestionCard(question) for question in questions]
+            )
+    except LoadingException as ex:
+        return html.h2(str(ex))
+    except RecordNotFound:
+        return html.h2("No polls available.")
+    except Exception:
+        return Page_404()
+```
+
 
 ## Links
 
