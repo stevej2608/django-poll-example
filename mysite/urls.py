@@ -17,14 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from polls.views import router
+from polls.views import spa_router
 
 
 urlpatterns = [
     path("polls/", include("polls.urls"), name="polls"),
     path('admin/', admin.site.urls),
     path("reactpy/", include("reactpy_django.http.urls")),
-    # path('', router, {'path': ''}, name='index'),
-    # path('<path:path>', router)
+    path('', spa_router, {'path': ''}, name='index'),
+    path('<path:path>', spa_router)
 
 ]
