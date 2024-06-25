@@ -20,7 +20,15 @@ Visit [http://localhost:8000](http://localhost:8000)
 
 
 Use Django admin to add/remove questions. Visit [Admin](http://localhost:8000/admin/) or
-simply click the **Admin** link, top-right in every page, (credentials user:admin, password:admin). 
+simply click the **Admin** link, top-right in every page.
+
+ Credentials:
+ 
+        user:admin, password:admin
+
+To change the admin password:
+
+        python manage.py changepassword admin
 
 ## Features
 
@@ -77,7 +85,7 @@ a try/catch block.
 ## Links
 
 * [reactpy]
-* [reactpy-django]: https://reactive-python.github.io/reactpy-django/latest/
+* [reactpy-django]
         * [use-mutation](https://reactive-python.github.io/reactpy-django/latest/reference/hooks/#use-mutation)
 * [django-unfold], Modern Django admin theme for seamless interface development
 * [Writing your first Django app]
@@ -86,6 +94,7 @@ a try/catch block.
 
 
 [reactpy]: https://reactpy.dev/docs/index.html
+[reactpy-django]: https://reactive-python.github.io/reactpy-django/latest/
 [reactpy_django.router]: https://reactive-python.github.io/reactpy-django/latest/reference/router/
 [Bootstrap Pulse Theme]: https://bootswatch.com/4/pulse/
 [Voting System Project Using Django Framework]: https://www.geeksforgeeks.org/voting-system-project-using-django-framework/
