@@ -9,9 +9,9 @@ with Django get up to speed by working through this first.
 
 ## Usage
 
-        git clone https://github.com/stevej2608/reactpy-django-polls
+        git clone https://github.com/stevej2608/reactpy-django-example
 
-        cd reactpy-django-polls
+        cd reactpy-django-example
         poetry install --no-root
 
         python manage.py runserver localhost:8000
