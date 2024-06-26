@@ -1,6 +1,6 @@
 # reactpy-django-example
 
-![](./docs/img/screenshot.jpg)
+![](./docs/img/screenshot.png)
 
 An example of using [reactpy-django] to create a simple, Django based, single 
 page application (SPA). The project is a reworking of the introductory 
