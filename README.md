@@ -36,6 +36,8 @@ To change the admin password:
 - [X] Uses [reactpy_django.router] to dispatch page views.
 - [X] Integrates with Django ORM using *use_query* and *use_mutation* hooks.
 - [X] Can be used along side other Django apps
+- [X] VSCODE debug configs for server & testing 
+
 
 ## Code Overview
 
@@ -98,6 +100,16 @@ a try/catch block.
         return Page_404()
 ```
 
+
+## Testing
+
+The first time:
+
+        playwright install 
+
+then:
+
+        python manage.py test
 
 ## Links
 
