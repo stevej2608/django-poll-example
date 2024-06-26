@@ -3,7 +3,7 @@ from typing import Dict, Any
 from django.urls import reverse
 from reactpy import component, event, html, use_state
 from reactpy_django.hooks import use_mutation
-from reactpy_router import use_params, link, Navigate
+from reactpy_router import link, Navigate
 
 from reactpy_forms import create_form, FormModel, use_form_state
 
@@ -96,7 +96,7 @@ def detail():
             error_message(error),
 
             Form(
-                [choice_field(choice) for choice in question.choice_set.all()],
+                [choice_field(choice) for choice in question.choice_set.all()], # type: ignore
                 SubmitButton(question, model.choice)
 
             )

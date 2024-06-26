@@ -8,12 +8,16 @@ from channels.testing import ChannelsLiveServerTestCase
 from channels.testing.live import make_application
 from asgiref.sync import sync_to_async
 
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
+
 from django.core.exceptions import ImproperlyConfigured
 from django.core.management import call_command
 from django.db import connections
 from django.utils import timezone
 from django.test.utils import modify_settings
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 
 from playwright.sync_api import sync_playwright
 
@@ -54,6 +58,24 @@ async def create_question(question_text, choices, days=30):
     return question
 
 
+async def create_admin(request, user='admin', email='admin@example.com', password='superadmin'):
+    User.objects.create_superuser(user, email=email, password=password)
+
+    user = authenticate(username=user, password=password)
+
+    if user is not None and user.is_superuser:
+        login(request, user)
+        # User is now logged in
+        return True
+    else:
+        # Authentication failed or user is not a superuser
+        return False
+
+
+
+# Slimmed down version of test harness used by reactpy-django
+# See https://github.com/reactive-python/reactpy-django/blob/main/tests/test_app/tests/test_components.py
+
 class ComponentTests(ChannelsLiveServerTestCase):
 
     databases = {"default"}
@@ -64,7 +86,7 @@ class ComponentTests(ChannelsLiveServerTestCase):
         # Repurposed from ChannelsLiveServerTestCase._pre_setup
 
         for connection in connections.all():
-            if cls._is_in_memory_db(cls, connection):
+            if cls._is_in_memory_db(cls, connection): # type: ignore
                 raise ImproperlyConfigured(
                     "ChannelLiveServerTestCase can not be used with in memory databases"
                 )
@@ -85,6 +107,12 @@ class ComponentTests(ChannelsLiveServerTestCase):
         cls._server_process.ready.wait()
         cls._port = cls._server_process.port.value
 
+        # Create an admin user
+
+        cls.admin_user = get_user_model().objects.create_superuser( # type: ignore
+            username='admin', email='admin@example.com', password='adminpass'
+        )
+
 
         # Open a Playwright browser window
 
@@ -93,7 +121,10 @@ class ComponentTests(ChannelsLiveServerTestCase):
 
         cls.playwright = sync_playwright().start()
         headless = strtobool(os.environ.get("PLAYWRIGHT_HEADLESS", GITHUB_ACTIONS))
-        cls.browser = cls.playwright.chromium.launch(headless=bool(headless))
+        cls.browser = cls.playwright.chromium.launch(
+            headless=bool(headless),
+            timeout=3000
+            )
 
 
     @classmethod
@@ -121,14 +152,24 @@ class ComponentTests(ChannelsLiveServerTestCase):
     def _post_teardown(self):
         """Handled manually in `tearDownClass` to prevent TransactionTestCase from doing
         database flushing. This is needed to prevent a `SynchronousOnlyOperation` from
-        occuring due to a bug within `ChannelsLiveServerTestCase`."""
+        occurring due to a bug within `ChannelsLiveServerTestCase`."""
 
 
     def setUp(self):
         pass
 
+    def wait_page_stable(self, page):
+        page.wait_for_load_state("networkidle")
+        page.wait_for_load_state("domcontentloaded")
 
-    def new_page(self, slug:str):
+
+    def page_goto(self, page, slug:str):
+        server_url = self.live_server_url
+        page.goto(f"{server_url}{slug}")
+        self.wait_page_stable(page)
+
+
+    def new_page(self, slug:str = "/"):
 
         server_url = self.live_server_url
 
@@ -147,11 +188,28 @@ class ComponentTests(ChannelsLiveServerTestCase):
         return MessageWriter(slug)
 
 
+    def login_as_admin(self, page):
+
+        self.page_goto(page, '/admin/')
+
+        # https://playwright.dev/python/docs/auth
+
+        page.get_by_label("username").fill("admin")
+        page.get_by_label("password").fill("adminpass")
+        page.locator("[type=submit]").click()
+
+
     def test_404(self):
         with self.new_page('/polls/99/') as page:
             elem = page.locator("h1")
             elem.wait_for()
             self.assertEqual("404 Not Found", elem.text_content())
+
+    def test_401(self):
+        with self.new_page('/polls/1/results/') as page:
+            elem = page.locator("h1")
+            elem.wait_for()
+            self.assertEqual("401 Authorization Required", elem.text_content())
 
 
     def test_no_questions(self):
@@ -168,7 +226,16 @@ class ComponentTests(ChannelsLiveServerTestCase):
         asyncio.run(create_question("What is the capital of France?", ['London', 'Paris', 'New York']))
         asyncio.run(create_question("What is the capital of Germany?", ['London', 'Berlin', 'New York']))
 
+
         with self.new_page(reverse("polls:index")) as page:
+
+            # # We need to login as amin because we're going to 
+            # # access the protected results page
+
+
+            # self.login_as_admin(page)
+
+            self.page_goto(page, reverse("polls:index"))
 
             # Confirm test the question is listed and select it for voting
 
@@ -177,30 +244,45 @@ class ComponentTests(ChannelsLiveServerTestCase):
             self.assertEqual("What is the capital of France?", elem.text_content())
             page.locator('"Vote Now"').locator("nth=1").click()
 
-            # Wait for the question detils page to appear
+            # Wait for the question details page to appear
 
             vote_btn = page.locator('"Vote"')
             vote_btn.wait_for()
 
-            # Check the first choice (London) radion button and vote
+            # Check the first choice (London) radio button and vote
 
             paris_checkbox = page.query_selector("input[value='2']")
             assert paris_checkbox
             paris_checkbox.click()
             vote_btn.click()
 
-            # We should have been returned to the index page, select the results page
+            # We should have been returned to the index
+            # page, select the results page. This will fail because 
+            # we're not authorized to look at the results page
 
             results_btn = page.locator('"Results"').locator("nth=1")
             results_btn.wait_for()
             results_btn.click()
 
-            # Wait for results page
+            # Wait for not authorized
 
-            back_btn = page.locator('"Back To Polls"')
-            back_btn.wait_for()
+            elem = page.locator("h1")
+            elem.wait_for()
+            self.assertEqual("401 Authorization Required", elem.text_content())
 
-            # confirm the London vote
+            # We need to login as admin to access the results page
+
+            self.login_as_admin(page)
+            self.page_goto(page, reverse("polls:index"))
+
+            # Goto the results page for the 'capital of France?' question
+
+            results_btn = page.locator('"Results"').locator("nth=1")
+            results_btn.click()
+
+            self.wait_page_stable(page)
+
+            # Confirm the Paris vote
 
             results = page.query_selector("ul.results")
             assert results

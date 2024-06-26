@@ -49,7 +49,7 @@ class Question(models.Model):
 
 
     async def inc_vote(self, choice: int):
-        selected_choice = await database_sync_to_async(self.choice_set.get)(pk=choice)
+        selected_choice = await database_sync_to_async(self.choice_set.get)(pk=choice) # type: ignore
         selected_choice.votes += 1
         await database_sync_to_async(selected_choice.save)()
 

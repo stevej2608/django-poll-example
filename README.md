@@ -34,6 +34,7 @@ To change the admin password:
 
 - [X] No templates, all pages are coded in python alone.
 - [X] Uses [reactpy_django.router] to dispatch page views.
+- [X] Authorization & protected routes.
 - [X] Integrates with Django ORM using *use_query* and *use_mutation* hooks.
 - [X] Can be used along side other Django apps
 - [X] VSCODE debug configs for server & testing 

@@ -24,4 +24,19 @@ def Page_404(msg: str = ''):
             html.a({'href': '/', 'role': 'button', 'class_name': 'outline'}, html.h5("Go to Home Page"))
         )
     )
+
+
+@component
+def Page_401(msg: str = ''):
+    return html.div({'class_name': 'container error-page'},
+        inline_style(STYLE, minify=True),
+        html.article(
+            html.header(
+                html.h1("401 Authorization Required"),
+            ),
+            html.h5("Sorry, you must be signed in to view this page."),
+            html.a({'href': '/', 'role': 'button', 'class_name': 'outline'}, html.h5("Go to Home Page"))
+        )
+    )
+    
     
