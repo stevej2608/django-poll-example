@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "django-basic"
+name = "reactpy-django-example"
 version = "0.1.0"
 description = ""
 authors = ["Steve Jones <jonesst2608@gmail.com>"]
